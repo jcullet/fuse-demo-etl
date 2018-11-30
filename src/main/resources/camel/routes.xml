@@ -35,7 +35,7 @@
                 <marshal id="_marshal_to_json_for_file">
                     <json library="Jackson"/>
                 </marshal>
-                <to id="_store_threat" uri="file:/tmp/file_output/"/>
+                <to id="_store_threat" uri="file:file_output/"/>
             </otherwise>
         </choice>
     </route>
