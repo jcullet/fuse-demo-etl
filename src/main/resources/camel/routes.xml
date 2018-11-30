@@ -16,7 +16,7 @@
     xmlns="http://camel.apache.org/schema/spring"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
     <route id="route_threats">
-        <from id="_threat_detected_queue" uri="activemq:queue:threat_detected"/>
+        <from id="_threat_detected_queue" uri="jms:queue:threat_detected"/>
         <log id="_log_initial_msg" message="${body}"/>
         <choice id="_choice_forward_or_store">
             <when id="_forward_when_org">
