@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~    http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+<routes id="routes-b1823dfe-22da-43a9-b1ff-e98d9337b1d0"
+    xmlns="http://camel.apache.org/schema/spring"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <route id="route_threats">
+        <from id="_threat_detected_queue" uri="activemq:queue:threat_detected"/>
+        <log id="_log_initial_msg" message="${body}"/>
+        <choice id="_choice_forward_or_store">
+            <when id="_forward_when_org">
+                <jsonpath>$[?(@.type=='identity')]</jsonpath>
+                <log id="_log_organization" message="Forwarding threat to Organization Service"/>
+                <marshal id="_marshal_to_json_for_rest">
+                    <json library="Jackson"/>
+                </marshal>
+                <setHeader headerName="CamelHttpMethod" id="_set_http_method_header">
+                    <constant>POST</constant>
+                </setHeader><!--  
+                <<to id="_to_org_service" uri="http4://localhost:8280/camel-rest/org-service?bridgeEndpoint=true"/>-->
+            </when>
+            <otherwise id="_otherwise_store">
+                <log id="_log_store" message="Storing payload for asynchronous processing."/>
+                <marshal id="_marshal_to_json_for_file">
+                    <json library="Jackson"/>
+                </marshal>
+                <to id="_store_threat" uri="file:/tmp/file_output/"/>
+            </otherwise>
+        </choice>
+    </route>
+</routes>
