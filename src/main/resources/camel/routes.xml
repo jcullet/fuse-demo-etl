@@ -28,7 +28,7 @@
                 <setHeader headerName="CamelHttpMethod" id="_set_http_method_header">
                     <constant>POST</constant>
                 </setHeader>  
-                <to id="_to_org_service" uri="http4://amqp-integration-service.fuse-demo.svc:8080/camel-rest/cms-callback?bridgeEndpoint=true"/>
+                <to id="_to_org_service" uri="http4://amqp-integration-service.fuse-demo.svc:8080/camel-rest/dms-callback"/>
             </when>
             <otherwise id="_otherwise_store">
                 <log id="_log_store" message="Storing payload for asynchronous processing."/>
