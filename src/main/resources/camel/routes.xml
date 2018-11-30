@@ -27,15 +27,15 @@
                 </marshal>
                 <setHeader headerName="CamelHttpMethod" id="_set_http_method_header">
                     <constant>POST</constant>
-                </setHeader><!--  
-                <<to id="_to_org_service" uri="http4://localhost:8280/camel-rest/org-service?bridgeEndpoint=true"/>-->
+                </setHeader>  
+                <<to id="_to_org_service" uri="http4://amqp-integration-service.fuse-demo.svc:8080/camel-rest/cms-callback?bridgeEndpoint=true"/>
             </when>
             <otherwise id="_otherwise_store">
                 <log id="_log_store" message="Storing payload for asynchronous processing."/>
                 <marshal id="_marshal_to_json_for_file">
                     <json library="Jackson"/>
                 </marshal>
-                <to id="_store_threat" uri="file:file_output/"/>
+                <to id="_store_threat" uri="file:file_output"/>
             </otherwise>
         </choice>
     </route>
